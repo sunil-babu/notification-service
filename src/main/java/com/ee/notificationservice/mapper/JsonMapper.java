@@ -1,0 +1,55 @@
+package com.ee.notificationservice.mapper;
+
+import com.ee.notificationservice.exception.MappingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+public class JsonMapper {
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    static {
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        objectMapper.configure(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS, false);
+        objectMapper.findAndRegisterModules();
+    }
+
+    /**
+     * Map the given JSON String to the required class type.
+     */
+    public static <T> T readFromJson(String json, Class<T> clazz) throws MappingException {
+        try {
+            return objectMapper.readValue(json, clazz);
+        } catch (Exception e) {
+            throw new MappingException(e);
+        }
+    }
+
+    /**
+     * Map the given JSON String to the required class type.
+     */
+    public static <T> T convertValue(Object object, Class<T> clazz) throws MappingException {
+        try {
+            return objectMapper.convertValue(object, clazz);
+        } catch (Exception e) {
+            throw new MappingException(e);
+        }
+    }
+
+
+    /**
+     * Map the given Object to a JSON String.
+     */
+    public static String writeToJson(Object obj) throws MappingException {
+        try {
+            return objectMapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new MappingException(e);
+        }
+    }
+}
