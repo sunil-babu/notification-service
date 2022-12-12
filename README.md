@@ -62,6 +62,14 @@ The tests demonstrate streaming order events that are  transformed, and results 
 Test Result
 ![img.png](img.png)
 
+## Metrics
+
+Navigate to http://localhost:8081/actuator/health
+username - ops
+password - password
+
+Metrics can be collected using prometheus and send to grafana
+
 ## Improvements
 
 1. Dockerize the component and also kafka 
@@ -69,6 +77,7 @@ Test Result
 3. More Exception handling and retry scenarios
 4. More automated tests.
 5. Add more event data like correlation id or trace id
+6. Encrypt UserName and Password (encryption using jasypt or other tools)
 
 ## Running the project locally
 

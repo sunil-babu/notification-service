@@ -21,6 +21,7 @@ public class OrderEvent<T> implements Serializable {
     private String eventName;
 
     private LocalDateTime eventDate;
+
     private T data;
 
 }

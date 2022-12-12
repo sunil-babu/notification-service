@@ -29,7 +29,6 @@ public class OrderStream {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderStream.class);
     private OrderMapper orderMapper;
     private static final Serde<String> STRING_SERDE = Serdes.String();
-    private static final Serde<Long> LONG_SERDE = Serdes.Long();
 
     private final kafkaServiceProperties kafkaProperties ;
 
@@ -40,11 +39,10 @@ public class OrderStream {
     }
     @Autowired
     public void buildPipeline(StreamsBuilder streamsBuilder) {
-
         KStream<String, OrderEvent> messageStream = streamsBuilder
             .stream(kafkaProperties.getInBoundTopic(), Consumed.with(STRING_SERDE, OrderSerdes.serdes()))
-            .peek((key, order) -> LOGGER.info("Order event received with key=" + key + ", payment=" + order))
-            .mapValues((order) -> {
+            .peek((key, order) -> LOGGER.info("Order event received with key {} and order {} ", key ,  order))
+            .mapValues(order -> {
                 if (order.getEventName().equals(OrderEventType.ORDER_CREATED.name())) {
                     OrderCreatedEvent orderCreatedEvent = JsonMapper.convertValue(order.getData(), OrderCreatedEvent.class);
                     order.setData(orderMapper.fromOrderCreatedEvent(orderCreatedEvent));
@@ -54,9 +52,10 @@ public class OrderStream {
                 }
                 return order;
             })
-            .peek((key, value) -> LOGGER.info("Mapped order event received with key=" + key + ", value=" + value));
+            .peek((key, value) -> LOGGER.info("Mapped order event received with key {} key and value {}" ,key, value));
 
-       // Publish outbound events.
-      messageStream.to(kafkaProperties.getOutBoundTopic(), Produced.with(STRING_SERDE, OrderSerdes.serdes()));
+        // Publish outbound events.
+        messageStream.to(kafkaProperties.getOutBoundTopic(), Produced.with(STRING_SERDE, OrderSerdes.serdes()));
     }
+
 }

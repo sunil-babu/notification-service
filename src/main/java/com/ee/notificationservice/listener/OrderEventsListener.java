@@ -37,15 +37,15 @@ public class OrderEventsListener {
     @KafkaListener(id = "${spring.kafka.consumer.group-id}", topics = "${spring.kafka.template.default-topic}" )
     public void handleMessage(@Payload OrderEvent<?> orderEvent, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic, @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
                               @Header(KafkaHeaders.OFFSET) int offset) {
-        LOGGER.info("Received message: {} from topic: {} ,partition : {} , offset : {} ", orderEvent.toString(), topic,partition,offset);
+        LOGGER.info("Received message: {} from topic: {} ,partition : {} , offset : {} ", orderEvent.getEventName(), topic,partition,offset);
         if(orderEvent.getEventId() == null) {
             throw new EventIdNotFoundException();
         }
     }
 
     @DltHandler
-    public void handleDlt(String message, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
-        log.info("Message: {} handled by dlq topic: {}", message, topic);
+    public void handleDlt(OrderEvent<?> orderEvent, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+        log.info("Message: {} handled by dlq topic: {}", orderEvent.getEventName(), topic);
     }
 }
 
