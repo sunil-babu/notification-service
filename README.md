@@ -97,43 +97,53 @@ Start up the Kafka Broker
 
 Send a Kafka message to topic order with below payload
 
-    {
-    "orderId": 3,
-    "shippingDate": "2019-03-27T10:15:30",
-    "deliveryCompanyId": 345,
-    "deliveryCompanyName": "sunil",
-    "shippingCost": 10,
-    "wareHousePosition": 54
-    }
-
+      {
+      "eventId":"123",
+      "eventName":"ORDER_SHIPPED",
+      "eventDate":null,
+      "data":{
+            "orderId":3,
+            "shippingDate":"2019-03-27T10:15:30",
+            "deliveryCompanyId":345,
+            "deliveryCompanyName":"sunil",
+            "shippingCost":10,
+            "wareHousePosition":54
+         }
+      }
+   
 OR
 
-    {
-        "customerId": 5,
-        "customerName": "sunil",
-        "creationDateTime": "2019-03-27T10:15:30",
-        "orderId": 1,
-        "orderRows": [
-            {
-            "orderRowId": 1,
-            "itemId": 1,
-            "quantity": 1,
-            "unitaryPrice": 20.50
-            },
-            {
-            "orderRowId": 2,
-            "itemId": 2,
-            "quantity": 5,
-            "unitaryPrice": 10.50
-            },
-            {
-            "orderRowId": 3,
-            "itemId": 3,
-            "quantity": 10,
-            "unitaryPrice": 10.50
-            }
-        ]
-    }
+      {
+      "eventId":null,
+      "eventName":"ORDER_CREATED",
+      "eventDate":null,
+      "data":{
+         "customerId":5,
+         "customerName":"sunil",
+         "creationDateTime":"2019-03-27T10:15:30",
+         "orderId":1,
+         "orderRows":[
+               {
+               "orderRowId":1,
+               "itemId":1,
+               "quantity":1,
+               "unitaryPrice":20.50
+               },
+               {
+               "orderRowId":2,
+               "itemId":2,
+               "quantity":5,
+               "unitaryPrice":10.50
+               },
+               {
+               "orderRowId":3,
+               "itemId":3,
+               "quantity":10,
+               "unitaryPrice":10.50
+               }
+            ]
+         }
+      }
 
 View result in acme-order topic
     
